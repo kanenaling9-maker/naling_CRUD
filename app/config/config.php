@@ -89,10 +89,10 @@ $config['date_default_timezone'] = 'Asia/Manila';
 |
 */
 $app_url = getenv('APP_URL');
-$request_host = $_SERVER['HTTP_HOST'] ?? '';
+$request_host = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? ($_SERVER['HTTP_HOST'] ?? '');
+$request_scheme = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http');
 if (!$app_url || ($request_host && preg_match('/localhost|127\.0\.0\.1/i', $app_url) && !preg_match('/localhost|127\.0\.0\.1/i', $request_host))) {
-	$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-	$app_url = $scheme . '://' . ($request_host ?: 'localhost') . '/';
+	$app_url = rtrim($request_scheme, ':/') . '://' . ($request_host ?: 'localhost') . '/';
 }
 $config['base_url'] = $app_url ?: 'http://localhost/LavaLust-dev-v4/';
 
