@@ -6,7 +6,6 @@ class Auth extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->call->model('UsersModel');
         $this->call->library('session');
         $this->call->helper('url');
     }
@@ -42,6 +41,7 @@ class Auth extends Controller
             return $this->response->redirect(site_url('products'));
         }
 
+        $this->call->model('UsersModel');
         $error = null;
         if ($this->request->is_post()) {
             $username = trim((string) $this->request->post('username'));

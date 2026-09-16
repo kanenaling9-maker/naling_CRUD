@@ -88,7 +88,12 @@ $config['date_default_timezone'] = 'Asia/Manila';
 | WARNING: You MUST set this value!
 |
 */
-$config['base_url'] 				= getenv('APP_URL') ?: 'http://localhost/LavaLust-dev-v4/';
+$app_url = getenv('APP_URL');
+if (getenv('APP_ENV') === 'production' && (!$app_url || preg_match('/localhost|127\.0\.0\.1/i', $app_url))) {
+	$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+	$app_url = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/';
+}
+$config['base_url'] = $app_url ?: 'http://localhost/LavaLust-dev-v4/';
 
 /*
 |--------------------------------------------------------------------------
